@@ -16,7 +16,7 @@ The appendix also determines the sharp possibilities $(p_5,p_6)\in\{(2,4),(3,8/3
 
 **[Order 4096: growth greater than the order](order4096/main.pdf).** We construct a completely pivoted row and column permutation of the Sylvester Hadamard matrix with
 
-$$g(H)=p_{4089}=4608=\frac98\,4096>4096.$$
+$$g(H)=p_{4089}=4608=\frac{9}{8}4096>4096.$$
 
 This disproves the long-standing conjecture that every completely pivoted Hadamard matrix has growth factor equal to its order. The construction extends to every order $n=2^d$ with $d\ge12$, giving $g(H)=9n/8$.
 
