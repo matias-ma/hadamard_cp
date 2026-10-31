@@ -1,0 +1,62 @@
+FRESH EXACT VERIFICATION RECORD
+
+The revised scripts were applied to the original supplied matrix.npy.
+The matrix file and all 124 finite pivot choices are preserved exactly.
+The constructor now lists ordinary integer pairs instead of encoded strings.
+
+1. Construction-based verification (standard-library rational arithmetic)
+Root   16: 10 local whole-active checks;  6 remaining
+Root   64: 16 local whole-active checks;  8 remaining
+Root  256: 22 local whole-active checks; 10 remaining
+Root 1024: 28 local whole-active checks; 12 remaining
+Root 4096: 48 local whole-active checks;  0 remaining
+PASS: all 16,777,216 file entries match the explicit Walsh-permutation formula
+PASS: both label lists are permutations; character orthogonality gives H H^T = 4096 I
+PASS: W2/W4 panel identities; all five quarter-state inverse identities and binary ranks
+PASS: 124 rational local checks plus four proved W4 lifts certify all 4096 pivots
+PASS: signed determinant product and dephased binary rank 12 of the final 14-square
+Growth = 4608 = (9/8)*4096; first overshoot = +4608 at step 4089, labels (191,3552)
+Signed pivot sequence SHA256: a761528e59bee03cd387a0b6b50e3d44efce44fc5d734fe8a326b684f9bfbec0
+Elapsed seconds: 2.008
+
+2. Independent full dense verification (matrix file only)
+This fresh run used an explicit 900-second elimination limit.
+PASS: all 16,777,216 sign entries and all 16,777,216 Gram entries (exact integers)
+ 512/4096 exact dense pivots checked
+1024/4096 exact dense pivots checked
+1536/4096 exact dense pivots checked
+2048/4096 exact dense pivots checked
+2560/4096 exact dense pivots checked
+3072/4096 exact dense pivots checked
+3584/4096 exact dense pivots checked
+PASS: all 4096 whole-active comparisons and all Schur updates are exact
+Growth = 4608 = (9/8)*4096; first overshoot = +4608 at step 4089
+Signed pivot sequence SHA256: a761528e59bee03cd387a0b6b50e3d44efce44fc5d734fe8a326b684f9bfbec0
+Maximum numerator = 10240; maximum denominator = 9; gcd fallbacks = 336
+Elapsed seconds: 221.683
+
+3. Preservation and rejection checks
+Python: 3.12.14
+NumPy: 2.3.5
+PASS: all original 124 finite choices, complete permutations, and signed pivots are preserved.
+PASS: revised constructor regenerates the supplied matrix.npy byte for byte.
+Matrix SHA-256: 3bde6b6832b314cbb8d0c92cf0e8ee651ef4e7a657caf4e3a4de051a97b3d99d
+PASS: a changed matrix sign is rejected by the constructor.
+PASS: a changed matrix sign is rejected by the independent Hadamard check.
+PASS: illegal complete pivot is rejected before an invalid update.
+PASS: prospective int64 overflow is rejected before an invalid update.
+PASS: final quarter-sign block has dephased binary rank 12.
+
+4. Script hashes
+f9cd356dbfdb0505737d24155be86eb09d47a8ccfdb7d1808b31ca1e3c27a5b1  verify_construction.py
+f34fd16f852b179358a8b1beb3db175f2a6d7da98af1088c3463c084a608a324  verify_dense.py
+
+No conclusion about the globally smallest counterexample order is asserted.
+
+5. Figure regeneration for the revised paper
+The matrix and both arithmetic verifiers are unchanged from the dense run above.
+PASS: full 4096-square PNG has exactly one pixel for every matrix entry.
+PASS: both 64-square PNGs are exact corner blocks in the same palette.
+PASS: all ten construction panels use the exact verified active matrices.
+Construction phases: 16 -> 6, 24 -> 8, 32 -> 10, 40 -> 12, 48 -> 14.
+Palette: off-white = +1; navy = -1. Matrix data and verifiers are unchanged.
