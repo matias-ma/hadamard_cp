@@ -10,4 +10,4 @@ PASS: 124 rational local checks plus four proved W4 lifts certify all 4096 pivot
 PASS: signed determinant product and dephased binary rank 12 of the final 14-square
 Growth = 4608 = (9/8)*4096; first overshoot = +4608 at step 4089, labels (191,3552)
 Signed pivot sequence SHA256: a761528e59bee03cd387a0b6b50e3d44efce44fc5d734fe8a326b684f9bfbec0
-Elapsed seconds: 1.788
+Elapsed seconds: 1.805

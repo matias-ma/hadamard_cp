@@ -1,0 +1,364 @@
+PEDANTIC AUDIT: HADAMARD COMPLETE-PIVOTING COUNTEREXAMPLE
+=======================================================
+
+VERDICT
+
+The central counterexample passes this audit. The supplied 4096-by-4096 sign
+matrix is Hadamard. In its supplied ordering every leading pivot is a maximum
+of the entire active Schur complement. Its growth is exactly 4608 = 9*4096/8.
+The first, and only, pivot exceeding 4096 is the positive pivot at one-based
+step 4089. The proof's powers-of-two corollary is valid.
+
+There are substantive reproducibility and documentation errors in the supplied
+collection. It mixes revisions: the PDF and both verifier scripts differ from
+the versions named in the hash manifest; the README describes another PDF;
+the historical logs describe programs other than the supplied scripts. These
+defects do not invalidate the counterexample. Fresh checks reproduced the
+mathematical claims independently of those historical logs.
+
+No uploaded file was edited. This audit bundle is a supplement, not a repaired
+release of the original paper. In particular it does not silently relabel old
+execution logs as output from newer programs.
+
+SCOPE AND EVIDENCE
+
+The audited inputs are the nine supplied files: main(20261101-023921).pdf,
+matrix.npy, verify_construction.py, verify_dense.py, pivot_certificate.json,
+README.md, SHA256SUMS, verification.txt, and construction_verification_recheck.txt.
+Their current hashes are in SOURCE_SHA256SUMS. The PDF has seven pages.
+
+The uploaded constructor was executed with its normal checks enabled. It
+performed its 124 local complete-pivot comparisons with fractions.Fraction,
+expanded the four lifting stages, checked the completed label permutations,
+and compared all 16,777,216 stored matrix entries against the Walsh formula.
+Its current write_matrix function also regenerated matrix.npy byte for byte
+in a temporary directory, with the same full-file SHA-256.
+
+An independent matrix-only program separately checked orthogonality and all
+4096 dense Schur steps. It did not import the constructor, read the JSON pivot
+certificate, or use a reference pivot sequence. It recorded each signed pivot
+and each independently computed whole-active maximum. Only after this run
+were its results compared with the constructor's full CSV.
+
+Orthogonality was checked using integer Hamming distances of packed sign rows:
+all 8,386,560 unordered pairs of distinct rows have distance 2048. The diagonal
+Gram entries are 4096 from the sign check. This establishes every entry of
+H H^T = 4096 I without using floating-point multiplication.
+
+The original dense script was also executed unchanged, from the directory
+containing matrix.npy. See original_dense_run.txt for its actual output.
+Its source was read and its recurrence and overflow guard were audited.
+The fresh execution environment was Python 3.12.14 and NumPy 2.3.5.
+
+Fresh independent dense results:
+  Growth: 4608
+  First overshoot: step 4089, signed pivot 4608
+  Maximum before the final fourteen pivots: 1024
+  Largest stored reduced numerator magnitude: 10240
+  Largest common denominator: 9
+  GCD fallbacks in the independent checker: 680
+  Matrix SHA-256: 3bde6b6832b314cbb8d0c92cf0e8ee651ef4e7a657caf4e3a4de051a97b3d99d
+  Signed-pivot SHA-256: a761528e59bee03cd387a0b6b50e3d44efce44fc5d734fe8a326b684f9bfbec0
+
+The pivot digest serializes each signed Fraction in Python's string form,
+one per line, with a final newline. It agrees with the constructor and the
+historical digest. The full independent results are in dense_pivots.json.
+The construction-derived rows, columns and pivots are in construction_pivots.csv.
+Every one of the 4096 signed pivots and 4096 active maxima agrees exactly
+between the independent run and the constructor. The old program's reported
+336 gcd fallbacks and this independent program's 680 count are implementation
+statistics, not invariant properties of the matrix; different reduction
+strategies can have different counts. The numerator and denominator maxima
+do agree with the old log. See dense_constructor_comparison.txt.
+
+1. MATHEMATICAL PROOF AUDIT
+
+1.1. The lifting lemma is correct, including global pivot comparisons.
+
+Let p=S[0,0] be nonzero with |p|=max|S_ij|. The initial entries of S tensor W2
+are bounded by |p|. After eliminating its first entry, every remaining entry
+is of the form x-y*z/p, whose magnitude is at most 2|p|. The next leading
+entry is exactly -2p, so the second pivot is a maximum of the whole matrix.
+Eliminating the block p W2 leaves
+
+  (S_ij - S_i0 S_0j/p) W2
+
+in block (i,j). Thus the residual is the original Schur complement tensored
+with W2. Applying the lemma twice replaces each signed pivot p by
+
+  p, -2p, -2p, 4p.
+
+This is precisely the rule implemented in the constructor. There is no
+unproved comparison against entries outside the chosen tensor block.
+
+1.2. The construction is a complete rooted history.
+
+Ambient order | Input active order | Additional pivots | Remaining order | Entry magnitude
+16            | 16                 | 10                | 6               | 4
+64            | 24                 | 16                | 8               | 16
+256           | 32                 | 22                | 10              | 64
+1024          | 40                 | 28                | 12              | 256
+4096          | 48                 | 34                | 14              | 1024
+
+The eliminated counts after these stages are respectively
+10, 4*10+16=56, 4*56+22=246, 4*246+28=1012, and 4*1012+34=4082.
+The last fourteen choices bring the count to 4096. The local choice counts
+sum to 10+16+22+28+34+14=124. There is no missing connection between an
+unsafe small block and a full Sylvester root.
+
+1.3. The exact suffix, signs, indexing, and maximum agree.
+
+The following signed pivots are the same in the constructor, independent
+dense elimination, and independent complementary-minor calculation:
+
+Step | Signed pivot | Whole-active maximum
+4083 | 1024         | 1024
+4084 | -2048        | 2048
+4085 | -2048        | 2048
+4086 | 2048         | 2048
+4087 | 4096         | 4096
+4088 | -4096        | 4096
+4089 | 4608         | 4608
+4090 | -10240/9     | 10240/9
+4091 | 6144/5       | 6144/5
+4092 | -4096/3      | 4096/3
+4093 | 1024         | 1024
+4094 | 2048         | 2048
+4095 | -2048        | 2048
+4096 | -4096        | 4096
+
+Their magnitudes are exactly equation (1) of the PDF. The paper defines p_k
+as a magnitude, so its positive p_4096=4096 is consistent with the signed
+code value -4096. Six eliminations of the fourteen-square create the
+overshoot, and the seventh selects it. The global index is 4082+7=4089.
+The first 4082 pivot magnitudes have maximum exactly 1024.
+
+1.4. A separate minor calculation confirms the critical pivot.
+
+Let D_m be the trailing m-by-m block of the original stored H. Since H is
+Hadamard, the corresponding active Schur complement is 4096 D_m^(-T).
+Integer Bareiss elimination, with every division checked, gives
+
+  det D_8 = 512,     det D_7 = 576.
+
+Therefore the signed selected pivot is 4096*576/512=4608. Computing all 64
+cofactors independently gives max|D_8^(-1)|=9/8, attained uniquely at (0,0),
+where it is positive. The adjugate identity D_8 adj(D_8)=512 I was also
+checked with Python integer arithmetic. This corroborates the overshoot;
+the rooted/dense checks separately establish reachability of this state.
+The full signed pivot product is +2^24576=+4096^2048.
+
+1.5. The tensor label convention is harmless.
+
+The code labels (r,a) by r+n*a, whereas usual block indices label it 4*r+a.
+Both satisfy the same product rule when used consistently on rows and columns:
+  W_4n[r+n*a,c+n*b]=W_n[r,c] W4[a,b].
+This moves the same binary coordinate bits on both label sets and preserves
+their dot products. Regenerating the construction with conventional labels
+produced the same numerical H, entry for entry. The overshoot Walsh labels
+(191,3552) are correct for the supplied code's convention; conventional
+tensor labels for the same numerical position are (4064,183).
+
+1.6. The corollary and stated limitations are correct.
+
+Each W2 lift doubles both the order and the largest pivot magnitude. Starting
+at 4096 therefore gives exact growth (9/8)2^d at every integer d>=12.
+This is an existence statement about chosen complete-pivot orderings. It
+does not state that every ordering has this growth, that 4096 is minimal,
+or that the proposed quasipolynomial lower bound is proved. The PDF does
+not assert any of those conclusions as theorems.
+
+2. PDF-TO-DATA CONSISTENCY
+
+All 124 Appendix A pairs match the JSON certificate and Python tuples, in
+the same order. They are zero-based positions in the current active matrix,
+with deletion preserving the relative order of remaining rows and columns.
+
+All 64 displayed entries of the eight-square residual on PDF page 2 agree
+with exact arithmetic. The displayed +9 is at current position (7,2), which
+is the seventh listed suffix choice; multiplying by n/8 gives +4608.
+
+All 6,300 cells across Figure 1's ten vector panels match the exact normalized
+constructor snapshots. All 16,777,216 pixels of Figure 2's embedded
+4096-by-4096 raster match matrix.npy: black is -1, white is +1. These were
+entrywise comparisons, not visual similarity checks. All seven pages were
+also visually inspected; no substantive clipping or formula layout error
+was found.
+
+Small manuscript clarification recommended: describe the eight-square display
+as being 'in the working row and column order of Appendix A.' It is not in
+the final prepermuted diagonal order of H. In H's order the +4608 entry is
+upper-left, as required. This is currently an avoidable ambiguity, not an
+incorrect matrix or a failed pivot comparison.
+
+The one-pixel-per-entry statement is true of the embedded source image.
+At ordinary page-view scale pixels are downsampled; reintroducing the
+advertised corner enlargements would improve readability but is optional.
+
+3. CONFIRMED PACKAGE AND DOCUMENTATION ERRORS
+
+3.1. The hash manifest is stale for both scripts and the PDF.
+
+verify_construction.py:
+  Manifest/log: f9cd356dbfdb0505737d24155be86eb09d47a8ccfdb7d1808b31ca1e3c27a5b1
+  Supplied:     51ba51a30479c125b7ad8e75a8f360548d6e544a6fc23cb7758466b3271d4706
+verify_dense.py:
+  Manifest/log: f34fd16f852b179358a8b1beb3db175f2a6d7da98af1088c3463c084a608a324
+  Supplied:     186265e9c25b705992cc92d53a1a7b241a41228a9492d9799df37bd5aefcce97
+PDF:
+  Manifest paper.pdf: b04456e27edadf02b207b208b9370ee4230543a5ce21e934b6edc723a18ae8de
+  Supplied renamed PDF: fcc9d8637f11763ac51ca4f84d269a95a9d9f06054fa4595c9331e26d495a910
+
+A filename change cannot explain the different PDF content hash. The current
+PDF and code are different revisions. The matrix, README, verification.txt,
+and construction_verification_recheck.txt do match their manifest hashes.
+Thus the underlying matrix and pivot digest are preserved, but the package's
+claim that both verifiers are unchanged is incorrect for these attachments.
+
+3.2. The historical logs are not runs of the supplied source versions.
+
+The current dense script has only 33 lines and prints a single final PASS
+line. It contains no argument parser, timeout, progress counter, pivot hash,
+first-overshoot report, numerator/denominator statistics, or fallback counter.
+It cannot produce the transcript attributed to it in verification.txt.
+
+The current constructor prints six groups; the old logs print five 'Root'
+lines. The logs also describe explicit W2/W4 identity tests, quarter-state
+inverse checks, binary ranks and a signed determinant-product check. Those
+additional tests are absent from the supplied constructor. Fresh supplemental
+checks in this bundle establish the relevant identities and ranks separately;
+the old transcript still must not be represented as output from this source.
+
+3.3. The README describes another PDF and another program interface.
+
+README line 3 describes six pages, two 64-by-64 corner enlargements,
+prompt excerpts, a talk acknowledgment, a greedy-minor discussion, and
+references to Georgiev/Gomez-Serrano/Tao/Wagner and Brent/Osborn. These are
+not features of the supplied seven-page PDF. The current PDF has seven
+references and black/white figures, not the README's navy/off-white palette.
+
+README lines 43-47 state that both programs report a common signed-pivot
+digest and that the dense program has a 550-second default timeout with a
+--seconds option. The supplied dense program does none of these. Passing
+--seconds 1800 is silently ignored; it does not create a timeout.
+
+3.4. The provided attachment set cannot reproduce the advertised source build.
+
+paper.tex, citations.bib, make_figures.py and the separate figures/ inputs
+listed in the README are absent from these nine attachments. They may exist
+in the full repository, but the advertised LaTeX and figure-generation
+commands cannot be reproduced using only what was supplied here. The PDF
+itself suffices to inspect the printed proof and embedded figures, and the
+matrix/counterexample can be verified without these missing sources.
+
+pivot_certificate.json is supplied and is correct, but it is omitted from
+both the README contents list and SHA256SUMS. Add it to the release manifest.
+
+4. DENSE VERIFIER: CORRECT ARITHMETIC, LIMITED REPORTING
+
+At every step S=A/d, with integer A and positive Python-integer d. If
+p=A[0,0], the exact updated matrix is
+  (p*A_ij - A_i0*A_0j)/(d*p).
+The supplied script's sign change when p<0 and its denominator d*abs(p)
+give exactly this rational matrix. Its common-gcd reduction is exact by
+definition; no rounding of Schur complements is involved.
+
+Its condition abs(p)==max(A.max(),-A.min()) checks the entire active matrix.
+The common denominator is positive, so comparing integer numerators is
+equivalent to comparing exact rational magnitudes.
+
+Its overflow guard 2*m*m<2^63 is evaluated using Python integers. Each
+product has magnitude <=m^2, and the subtraction has magnitude <=2*m^2.
+The guard therefore protects both multiplications, subtraction, sign change
+and gcd against int64 overflow. There is no off-by-one safety gap.
+
+The Gram check on line 10 literally uses floating point:
+  H.astype(float) @ H.T.
+That differs from the old transcript's description of an integer Gram
+implementation. It is nevertheless exact here under ordinary binary64
+NumPy/BLAS arithmetic: all products are +/-1 and every partial sum is an
+integer of magnitude at most 4096, exactly representable in binary64.
+Calling this a rounding-induced invalidation of the counterexample would
+be incorrect. The independent packed-bit check removes even this reliance
+on the floating implementation.
+
+Recommended hardening, separate from errors in the theorem:
+* Use an explicit check/require function instead of assert, since python -O
+  disables the current sign, Gram, legality, overflow and final-growth checks.
+  The normal documented python3 invocation keeps these checks enabled.
+* Assert growth==4608 and the first overshoot index/sign, rather than only
+  growth>4096. The current final line prints the actual growth but does not
+  enforce the full advertised result.
+* Record all signed pivots and output the digest if the README promises it.
+* Resolve matrix.npy relative to the script or accept an explicit path.
+  Presently the dense script uses the current working directory, unlike the
+  constructor's file-relative default. It works from the supplied directory.
+* Either implement the documented timeout or remove that documentation.
+
+5. REFERENCES AND ASYMPTOTIC CLAIMS
+
+The reference-dependent inference in Section 3 is correct. Shah and Urschel's
+Theorem 1.7 supplies quasipolynomial complete-pivot growth for unrestricted
+real matrices. Edelman and Urschel's Theorem 3.3 transfers growth to any
+restricted real entry set at every target order m>4n(3n+1). For {-1,+1} its
+prefactor is one. Choosing n proportional to sqrt(m) preserves the
+quasipolynomial scale. This justifies the sign-matrix sentence but does not
+provide a Hadamard lower bound; the latter is correctly called a conjecture.
+
+Primary sources checked:
+  https://math.mit.edu/~urschel/preprints/entrygrowth.pdf (Theorem 1.7)
+  https://math.mit.edu/~urschel/preprints/gauss.pdf (Theorem 3.3)
+  https://www.tandfonline.com/doi/full/10.1080/03081087.2026.2660796
+    (Peca-Medlin, Proposition 2.10)
+
+The Peca-Medlin proposition is a valid antecedent of the tensor lemma. That
+article also contains a broader sentence about all Sylvester-equivalent
+matrices which is not proved by the cited proposition. A clarifying remark
+distinguishing particular tensor orderings from every permitted tie history
+would help avoid an apparent literature conflict; it is not needed to repair
+the proof in this PDF.
+
+The advertised GitHub repository could not be independently checked through
+the available retrieval path. Its access error is not evidence of a dead
+link. Author affiliation and the account of historical AI use are outside
+the mathematical/certificate audit.
+
+6. RELEASE REPAIRS TO MAKE
+
+1. Freeze one final PDF and one version of each verification script.
+2. Rerun those exact scripts, record fresh outputs and environment versions,
+   and distinguish fresh results from historical transcripts.
+3. Rewrite README to match that actual PDF, actual files, and actual CLI.
+4. Include the advertised TeX/BibTeX/figure sources, or remove instructions
+   claiming the attachment set can regenerate them.
+5. Regenerate SHA256SUMS only after all files are final; include the JSON
+   certificate and use the actual supplied PDF filename.
+6. Add the short working-order clarification for the eight-square display.
+
+These are reproducibility repairs. No change to the matrix, 124 choices,
+growth factor, critical pivot, lifting argument or corollary is indicated
+by this audit.
+
+7. REPRODUCING THIS AUDIT BUNDLE
+
+The original matrix and source files are deliberately not duplicated here.
+Keep the original attachments together in an input directory. The independent
+dense checker needs Python and NumPy >=2.0 (for bitwise_count). The minor
+checker needs Python and NumPy. The package consistency checker additionally
+needs PyMuPDF, Pillow and the pdftotext executable.
+
+Examples, run from this extracted audit directory (replace INPUT):
+  python3 independent_dense_audit.py INPUT/matrix.npy --output rerun_dense.json
+  python3 check_complementary_minors.py --matrix INPUT/matrix.npy --compare-pivots construction_pivots.csv
+  python3 audit_package_consistency.py --input INPUT > rerun_consistency.json
+  python3 supplemental_checks.py --input INPUT
+
+The independent dense checker is intentionally matrix-only. It reports what
+it derives rather than trusting a hardcoded pivot list. The complementary
+minor checker is a short independent corroboration, not a substitute for
+verifying the rooted prefix. The package consistency checker intentionally
+imports the supplied constructor to compare the representations with one
+another; its purpose differs from the independent dense audit.
+
+The bundle's SHA256SUMS covers its own report, evidence and scripts.
+SOURCE_SHA256SUMS instead covers the exact original attachments audited.

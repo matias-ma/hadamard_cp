@@ -20,6 +20,12 @@ BASE = Path(__file__).resolve().parent
 
 def main():
     entries = (BASE / 'SHA256SUMS').read_text().splitlines()
+    names = [entry.split('  ', 1)[1] for entry in entries]
+    actual_names = {p.relative_to(BASE).as_posix() for p in BASE.rglob('*')
+                    if p.is_file() and p.name != 'SHA256SUMS'
+                    and '__pycache__' not in p.parts and p.name != '.DS_Store'}
+    check(len(names) == len(set(names)), 'Duplicate checksum filenames')
+    check(set(names) == actual_names, 'Manifest does not cover the package files')
     for entry in entries:
         expected, name = entry.split('  ', 1)
         check(hashlib.sha256((BASE / name).read_bytes()).hexdigest() == expected,
@@ -66,9 +72,23 @@ def main():
               'Regenerated matrix is not byte-identical')
     print('PASS: matrix regeneration is byte-identical.')
     overshoots = [i + 1 for i, p in enumerate(pivots) if abs(p) > 4096]
-    check(overshoots[0] == 4089 and pivots[4088] == 4608,
+    check(overshoots == [4089] and pivots[4088] == 4608
+          and max(map(abs, pivots)) == 4608,
           'Unexpected first overshoot')
-    print('PASS: growth 4608; first overshoot +4608 at step 4089.')
+    print('PASS: growth 4608; exactly one overshoot, +4608 at step 4089.')
+
+    dense = json.loads((BASE / 'audit/dense_pivots.json').read_text())
+    check(dense['matrix_sha256'] == hashlib.sha256((BASE / 'matrix.npy').read_bytes()).hexdigest(),
+          'Dense history describes a different matrix')
+    check(dense['signed_pivots'] == list(map(str, pivots)), 'Dense signed pivots differ')
+    check(dense['whole_active_maxima'] == [str(abs(p)) for p in pivots],
+          'Dense active maxima differ')
+    signature = hashlib.sha256(('\n'.join(map(str, pivots)) + '\n').encode()).hexdigest()
+    check(dense['signed_pivot_sha256'] == signature, 'Dense digest differs')
+    check(dense['order'] == 4096 and dense['growth'] == '4608'
+          and dense['overshoots'] == [{'step': 4089, 'signed_pivot': '4608'}],
+          'Dense summary differs')
+    print('PASS: all 4096 matrix-only dense pivots and active maxima agree.')
 
 
 if __name__ == '__main__':

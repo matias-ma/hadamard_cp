@@ -41,7 +41,10 @@ python3 order64/verify_paper.py
 python3 order4096/verify_construction.py
 ```
 
-The second script checks the construction and all entries of the supplied [4096 × 4096 matrix](order4096/matrix.npy). For an independent dense verification, install NumPy and run `python3 verify_dense.py` from `order4096/`.
+The second script checks the construction and all entries of the supplied [4096 × 4096 matrix](order4096/matrix.npy). For an independent dense verification, install NumPy >= 2.0 and run
+`python3 order4096/verify_dense.py --seconds 1800`. This checks exact
+orthogonality and every active maximum, and enforces the unique +4608
+overshoot at step 4089.
 
 The [order-4096 verification guide](order4096/README.md) includes the portable
 pivot certificate, complete pivot/permutation table, current checksums, and

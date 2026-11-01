@@ -1,0 +1,123 @@
+{
+  "pdf_pages": 7,
+  "pdf_sha256": "04d58dc8e9eeedbc7a9c5dfebaa06df602fa2ceb15b3ed177699606410cb5f22",
+  "pivot_pair_counts": [
+    124,
+    124,
+    124
+  ],
+  "all_124_pairs_match": true,
+  "figure2_shape": [
+    4096,
+    4096,
+    3
+  ],
+  "figure2_black_white_only": true,
+  "figure2_gray_channels": true,
+  "figure2_all_16777216_pixels_match": true,
+  "figure2_display_rect": [
+    72.0,
+    144.08502197265625,
+    540.0089721679688,
+    612.093994140625
+  ],
+  "figure1_panels": [
+    {
+      "ambient_order": 16,
+      "side": "start",
+      "size": 16,
+      "all_signs_match": true,
+      "one_vector_cell_per_entry": true
+    },
+    {
+      "ambient_order": 16,
+      "side": "end",
+      "size": 6,
+      "all_signs_match": true,
+      "one_vector_cell_per_entry": true
+    },
+    {
+      "ambient_order": 64,
+      "side": "start",
+      "size": 24,
+      "all_signs_match": true,
+      "one_vector_cell_per_entry": true
+    },
+    {
+      "ambient_order": 64,
+      "side": "end",
+      "size": 8,
+      "all_signs_match": true,
+      "one_vector_cell_per_entry": true
+    },
+    {
+      "ambient_order": 256,
+      "side": "start",
+      "size": 32,
+      "all_signs_match": true,
+      "one_vector_cell_per_entry": true
+    },
+    {
+      "ambient_order": 256,
+      "side": "end",
+      "size": 10,
+      "all_signs_match": true,
+      "one_vector_cell_per_entry": true
+    },
+    {
+      "ambient_order": 1024,
+      "side": "start",
+      "size": 40,
+      "all_signs_match": true,
+      "one_vector_cell_per_entry": true
+    },
+    {
+      "ambient_order": 1024,
+      "side": "end",
+      "size": 12,
+      "all_signs_match": true,
+      "one_vector_cell_per_entry": true
+    },
+    {
+      "ambient_order": 4096,
+      "side": "start",
+      "size": 48,
+      "all_signs_match": true,
+      "one_vector_cell_per_entry": true
+    },
+    {
+      "ambient_order": 4096,
+      "side": "end",
+      "size": 14,
+      "all_signs_match": true,
+      "one_vector_cell_per_entry": true
+    }
+  ],
+  "printed_8_by_8_matches_exactly": true,
+  "final_14_signed_pivots": [
+    "1024",
+    "-2048",
+    "-2048",
+    "2048",
+    "4096",
+    "-4096",
+    "4608",
+    "-10240/9",
+    "6144/5",
+    "-4096/3",
+    "1024",
+    "2048",
+    "-2048",
+    "-4096"
+  ],
+  "overshoot_step_one_based": 4089,
+  "overshoot_code_labels": [
+    191,
+    3552
+  ],
+  "canonical_tensor_labels_give_same_matrix": true,
+  "overshoot_canonical_labels": [
+    4064,
+    183
+  ]
+}

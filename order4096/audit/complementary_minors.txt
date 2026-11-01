@@ -1,0 +1,35 @@
+INDEPENDENT COMPLEMENTARY-MINOR AUDIT
+Input: matrix.npy only until the final comparison section
+D_m = trailing m-by-m block of the original stored H; det D_0 = 1
+Signed pivots use S_m = 4096 D_m^(-T), conditional on the rooted prefix
+m, step, signed_det_D_m, signed_pivot
+14, 4083, -16384, 1024
+13, 4084, -4096, -2048
+12, 4085, 2048, -2048
+11, 4086, -1024, 2048
+10, 4087, -512, 4096
+9, 4088, -512, -4096
+8, 4089, 512, 4608
+7, 4090, 576, -10240/9
+6, 4091, -160, 6144/5
+5, 4092, -48, -4096/3
+4, 4093, 16, 1024
+3, 4094, 4, 2048
+2, 4095, 2, -2048
+1, 4096, -1, -4096
+PASS: all fourteen Bareiss determinants are nonzero; every division is exact
+All signed D8 cofactors, in row-column order:
+576 -320 -256 448 -192 -128 -64 -64
+-256 0 0 -256 0 0 0 0
+192 -192 0 64 -64 -128 64 64
+-64 64 0 -192 -64 128 64 64
+-128 128 0 -128 128 0 128 -128
+64 -64 0 -64 64 128 -64 -64
+-128 128 0 -128 128 0 -128 128
+-256 256 256 -256 0 0 0 0
+PASS: D8 * adj(D8) = det(D8) I8 in exact integer arithmetic
+max |D8^(-1)| = 9/8; leading entry = 9/8
+Inverse maximizers (zero-based): [(0, 0)]
+Selected step 4089 signed Schur pivot = 4608
+PASS: all fourteen independently derived signed pivots match the construction CSV
+PASS: product of all 4096 signed pivots = +2^24576 = +4096^2048

@@ -1,5 +1,22 @@
-Python: 3.13.5 NumPy: 2.5.4
-Command: python verify_dense.py (assertions enabled)
+PASS: all signs and row inner products (exact packed-bit arithmetic).
+256/4096 pivots checked; elapsed 27.2s
+512/4096 pivots checked; elapsed 51.2s
+768/4096 pivots checked; elapsed 72.7s
+1024/4096 pivots checked; elapsed 91.1s
+1280/4096 pivots checked; elapsed 106.1s
+1536/4096 pivots checked; elapsed 118.3s
+1792/4096 pivots checked; elapsed 128.5s
+2048/4096 pivots checked; elapsed 136.7s
+2304/4096 pivots checked; elapsed 143.2s
+2560/4096 pivots checked; elapsed 148.1s
+2816/4096 pivots checked; elapsed 151.8s
+3072/4096 pivots checked; elapsed 154.0s
+3328/4096 pivots checked; elapsed 155.4s
+3584/4096 pivots checked; elapsed 156.0s
+3840/4096 pivots checked; elapsed 156.3s
 PASS: Hadamard, completely pivoted, growth = 4608
-PASS: growth is exactly 4608.
-Elapsed seconds: 127.836
+Exactly one overshoot: +4608 at step 4089.
+Signed pivot sequence SHA256: a761528e59bee03cd387a0b6b50e3d44efce44fc5d734fe8a326b684f9bfbec0
+Maximum numerator: 10240
+Maximum denominator: 9
+Elapsed seconds: 156.305

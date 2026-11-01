@@ -1,0 +1,11 @@
+test_corrupted_sign (test_verify_dense.DenseNegativeControls.test_corrupted_sign) ... ok
+test_deadline (test_verify_dense.DenseNegativeControls.test_deadline) ... ok
+test_duplicate_row (test_verify_dense.DenseNegativeControls.test_duplicate_row) ... ok
+test_illegal_diagonal_order (test_verify_dense.DenseNegativeControls.test_illegal_diagonal_order) ... ok
+test_non_sign (test_verify_dense.DenseNegativeControls.test_non_sign) ... ok
+test_wrong_shape (test_verify_dense.DenseNegativeControls.test_wrong_shape) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.005s
+
+OK
