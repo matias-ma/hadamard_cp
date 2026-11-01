@@ -1,8 +1,5 @@
 # A Hadamard matrix with growth factor greater than its order
 
-The [paper](main.pdf) by Matias Andia is now uploaded to
-[Zenodo](https://zenodo.org/records/23871097).
-
 We construct a row and column permutation of the Sylvester Hadamard matrix
 of order 4096 that is completely pivoted and has growth factor
 
@@ -22,3 +19,6 @@ library only):
 ```sh
 python3 order4096/verify_construction.py
 ```
+
+The [paper](main.pdf) can be found at
+[Zenodo](https://zenodo.org/records/23871097).
