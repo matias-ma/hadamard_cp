@@ -4,8 +4,7 @@ The supplied matrix is a row and column permutation of the Sylvester Hadamard
 matrix of order 4096. Its diagonal elimination path is completely pivoted,
 with growth **4608 = (9/8)4096** and first overshoot **+4608 at step 4089**.
 The proof, including the lifting lemma and 124 explicit pivot choices, is in
-[main.pdf](main.pdf). This directory is self-contained for verifying the
-construction. The PDF is the only manuscript artifact included.
+[main.pdf](main.pdf).
 
 ## Run the checks
 
