@@ -1,0 +1,10 @@
+Group 1: order 16, 10 exact pivot checks, 6 rows remaining
+Group 2: order 64, 16 exact pivot checks, 8 rows remaining
+Group 3: order 256, 22 exact pivot checks, 10 rows remaining
+Group 4: order 1024, 28 exact pivot checks, 12 rows remaining
+Group 5: order 4096, 34 exact pivot checks, 14 rows remaining
+Group 6: order 4096, 14 exact pivot checks, 0 rows remaining
+PASS: 124 exact local checks and four lifts certify all 4096 pivots.
+PASS: all matrix entries match P W_4096 Q; hence H H^T = 4096 I.
+Growth = 4608 = (9/8)*4096, attained at pivot 4089.
+Signed pivot sequence SHA256: a761528e59bee03cd387a0b6b50e3d44efce44fc5d734fe8a326b684f9bfbec0

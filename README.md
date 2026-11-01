@@ -42,3 +42,8 @@ python3 order4096/verify_construction.py
 ```
 
 The second script checks the construction and all entries of the supplied [4096 × 4096 matrix](order4096/matrix.npy). For an independent dense verification, install NumPy and run `python3 verify_dense.py` from `order4096/`.
+
+The [order-4096 verification guide](order4096/README.md) includes the portable
+pivot certificate, complete pivot/permutation table, current checksums, and
+fresh audit results. Run `python3 order4096/verify_package.py` to check their
+consistency and regenerate the matrix byte for byte.

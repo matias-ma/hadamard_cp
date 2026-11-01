@@ -1,0 +1,5 @@
+Python: 3.13.5 NumPy: 2.5.4
+Command: python verify_dense.py (assertions enabled)
+PASS: Hadamard, completely pivoted, growth = 4608
+PASS: growth is exactly 4608.
+Elapsed seconds: 127.836
